@@ -14,17 +14,21 @@ const productData: IProduct = {
     count: 10,
   },
 };
+interface CreateProductProps {
+  onCreate: (product: IProduct) => void;
+}
 
-export const CreateProduct = () => {
+export const CreateProduct = ({ onCreate }: CreateProductProps) => {
   const [value, setValue] = useState("");
   const [titleError, setTitleError] = useState("");
 
   const handleFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setTitleError("");
 
     if (value.trim().length === 0) {
-        setTitleError("Please enter valid title");
-        return
+      setTitleError("Please enter valid title");
+      return;
     }
 
     productData.title = value;
@@ -32,6 +36,8 @@ export const CreateProduct = () => {
       "https://fakestoreapi.com/products",
       productData
     );
+
+    onCreate(response.data);
   };
 
   const handleChangeInputValue = (
